@@ -6,3 +6,17 @@
 - [PyCharm 2020.3.3](https://www.jetbrains.com/pycharm/)
 - [Python 3.8.7](https://www.python.org/)
 - [Flask 1.1.2](https://flask.palletsprojects.com/en/1.1.x/)
+
+## environment variable
+
+```shell
+$ export FLASK_APP=app.py
+$ export FLASK_DEBUG=True
+```
+
+## command
+
+```shell
+# run server
+$ flask run
+```
