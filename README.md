@@ -19,4 +19,22 @@ $ export FLASK_DEBUG=True
 ```shell
 # run server
 $ flask run
+
+# open shell
+$ flask shell
+```
+
+## database migration
+
+```shell
+# init
+$ flask db init
+
+# make migration
+$ flask db migrate -m "initial migration"
+
+# migrate
+$ flask db upgrade
+$ flask db downgrade
+$ flask db stamp
 ```
