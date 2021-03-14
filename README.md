@@ -25,6 +25,9 @@ $ flask run
 
 # open shell
 $ flask shell
+
+# run unit test
+$ flask test
 ```
 
 ## database migration
