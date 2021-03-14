@@ -2,7 +2,7 @@ import time
 import unittest
 
 from app import create_app, db
-from app.models import User
+from app.models import User, Permission, Role, AnonymousUser
 
 
 class UserModelTestCase(unittest.TestCase):
@@ -11,6 +11,7 @@ class UserModelTestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
+        Role.insert_roles()
 
     def tearDown(self):
         db.session.remove()
@@ -103,3 +104,37 @@ class UserModelTestCase(unittest.TestCase):
         token = user2.generate_email_change_token('john@example.com')
         self.assertFalse(user2.change_email(token))
         self.assertTrue(user2.email == 'susan@example.org')
+
+    def test_user_role(self):
+        user = User(email='john@example.com', password='cat')
+        self.assertTrue(user.can(Permission.FOLLOW))
+        self.assertTrue(user.can(Permission.COMMENT))
+        self.assertTrue(user.can(Permission.WRITE))
+        self.assertFalse(user.can(Permission.MODERATE))
+        self.assertFalse(user.can(Permission.ADMIN))
+
+    def test_moderator_role(self):
+        role = Role.query.filter_by(name='Moderator').first()
+        user = User(email='john@example.com', password='cat', role=role)
+        self.assertTrue(user.can(Permission.FOLLOW))
+        self.assertTrue(user.can(Permission.COMMENT))
+        self.assertTrue(user.can(Permission.WRITE))
+        self.assertTrue(user.can(Permission.MODERATE))
+        self.assertFalse(user.can(Permission.ADMIN))
+
+    def test_administrator_role(self):
+        role = Role.query.filter_by(name='Administrator').first()
+        user = User(email='john@example.com', password='cat', role=role)
+        self.assertTrue(user.can(Permission.FOLLOW))
+        self.assertTrue(user.can(Permission.COMMENT))
+        self.assertTrue(user.can(Permission.WRITE))
+        self.assertTrue(user.can(Permission.MODERATE))
+        self.assertTrue(user.can(Permission.ADMIN))
+
+    def test_anonymous_user(self):
+        user = AnonymousUser()
+        self.assertFalse(user.can(Permission.FOLLOW))
+        self.assertFalse(user.can(Permission.COMMENT))
+        self.assertFalse(user.can(Permission.WRITE))
+        self.assertFalse(user.can(Permission.MODERATE))
+        self.assertFalse(user.can(Permission.ADMIN))

@@ -44,3 +44,11 @@ $ flask db upgrade
 $ flask db downgrade
 $ flask db stamp
 ```
+
+## load data
+
+```python
+from app.models import Role
+
+Role.insert.roles
+```
