@@ -10,8 +10,8 @@
 ## environment variable
 
 ```shell
-$ export FLASK_APP=app.py
-$ export FLASK_DEBUG=True
+$ export FLASK_APP=main.py
+$ export FLASK_CONFIG=development
 $ export MAIL_USERNAME=<your email address>
 $ export MAIL_PASSWORD=<your email password>
 $ export FLASKY_ADMIN=<your email address>
