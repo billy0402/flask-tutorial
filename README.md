@@ -52,3 +52,12 @@ from app.models import Role
 
 Role.insert.roles
 ```
+
+## fake data
+
+```python
+from app import fake
+
+fake.users()
+fake.posts()
+```

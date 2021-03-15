@@ -1,17 +1,20 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 
 from . import user
 from .forms import EditForm, AdminEditForm
 from .. import db
 from ..decorators import admin_required
-from ..models import User, Role
+from ..models import User, Role, Post
 
 
 @user.route('/<username>')
 def index(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user/index.html', user=user)
+    if not user:
+        abort(404)
+    posts = user.posts.order_by(Post.timestamp.desc()).all()
+    return render_template('user/index.html', user=user, posts=posts)
 
 
 @user.route('/edit', methods=['GET', 'POST'])
