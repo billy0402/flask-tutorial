@@ -1,5 +1,6 @@
 import time
 import unittest
+from datetime import datetime
 
 from app import create_app, db
 from app.models import User, Permission, Role, AnonymousUser
@@ -138,3 +139,38 @@ class UserModelTestCase(unittest.TestCase):
         self.assertFalse(user.can(Permission.WRITE))
         self.assertFalse(user.can(Permission.MODERATE))
         self.assertFalse(user.can(Permission.ADMIN))
+
+    def test_timestamps(self):
+        user = User(password='cat')
+        db.session.add(user)
+        db.session.commit()
+        self.assertTrue(
+            (datetime.utcnow() - user.member_since).total_seconds() < 3,
+        )
+        self.assertTrue(
+            (datetime.utcnow() - user.last_seen).total_seconds() < 3,
+        )
+
+    def test_ping(self):
+        user = User(password='cat')
+        db.session.add(user)
+        db.session.commit()
+        time.sleep(2)
+        last_seen_before = user.last_seen
+        user.ping()
+        self.assertTrue(user.last_seen > last_seen_before)
+
+    def test_gravatar(self):
+        user = User(email='john@example.com', password='cat')
+        with self.app.test_request_context('/'):
+            gravatar = user.gravatar()
+            gravatar_256 = user.gravatar(size=256)
+            gravatar_pg = user.gravatar(rating='pg')
+            gravatar_retro = user.gravatar(default='retro')
+        self.assertTrue(
+            'https://secure.gravatar.com/avatar/'
+            'd4c74594d841139328695756648b6bd6' in gravatar,
+        )
+        self.assertTrue('s=256' in gravatar_256)
+        self.assertTrue('r=pg' in gravatar_pg)
+        self.assertTrue('d=retro' in gravatar_retro)

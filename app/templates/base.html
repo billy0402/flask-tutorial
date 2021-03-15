@@ -8,6 +8,8 @@
           href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="icon" type="image/x-icon"
           href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -26,7 +28,18 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li>
+                        <a href="{{ url_for('main.index') }}">
+                            Home
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                        <li>
+                            <a href="{{ url_for('user.index', username=current_user.username) }}">
+                                Profile
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

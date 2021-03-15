@@ -1,0 +1,136 @@
+.profile-thumbnail {
+    position: absolute;
+}
+
+.profile-header {
+    min-height: 260px;
+    margin-left: 280px;
+}
+
+.post-tabs {
+    margin-top: 16px;
+}
+
+ul.posts {
+    list-style-type: none;
+    padding: 0;
+    margin: 16px 0 0 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+.post-tabs ul.posts {
+    margin: 0;
+    border-top: none;
+}
+
+ul.posts li.post {
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+ul.posts li.post:hover {
+    background-color: #f0f0f0;
+}
+
+.post-date {
+    float: right;
+}
+
+.post-author {
+    font-weight: bold;
+}
+
+.post-thumbnail {
+    position: absolute;
+}
+
+.post-content {
+    margin-left: 48px;
+    min-height: 48px;
+}
+
+.post-footer {
+    text-align: right;
+}
+
+ul.comments {
+    list-style-type: none;
+    padding: 0;
+    margin: 16px 0 0 0;
+}
+
+ul.comments li.comment {
+    margin-left: 32px;
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+ul.comments li.comment:nth-child(1) {
+    border-top: 1px solid #e0e0e0;
+}
+
+ul.comments li.comment:hover {
+    background-color: #f0f0f0;
+}
+
+.comment-date {
+    float: right;
+}
+
+.comment-author {
+    font-weight: bold;
+}
+
+.comment-thumbnail {
+    position: absolute;
+}
+
+.comment-content {
+    margin-left: 48px;
+    min-height: 48px;
+}
+
+.comment-form {
+    margin: 16px 0 16px 32px;
+}
+
+.pagination {
+    width: 100%;
+    text-align: right;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.flask-pagedown-preview {
+    margin: 10px 0 10px 0;
+    border: 1px solid #e0e0e0;
+    padding: 4px;
+}
+
+.flask-pagedown-preview h1 {
+    font-size: 140%;
+}
+
+.flask-pagedown-preview h2 {
+    font-size: 130%;
+}
+
+.flask-pagedown-preview h3 {
+    font-size: 120%;
+}
+
+.post-body h1 {
+    font-size: 140%;
+}
+
+.post-body h2 {
+    font-size: 130%;
+}
+
+.post-body h3 {
+    font-size: 120%;
+}
+
+.table.followers tr {
+    border-bottom: 1px solid #e0e0e0;
+}
