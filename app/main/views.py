@@ -6,6 +6,7 @@ from flask import (
     current_app,
     abort,
     flash,
+    make_response,
 )
 from flask_login import current_user, login_required
 
@@ -28,8 +29,16 @@ def index():
         db.session.commit()
         return redirect(url_for('.index'))
 
+    show_followed = False
+    if current_user.is_authenticated:
+        show_followed = bool(request.cookies.get('show_followed', ''))
+    if show_followed:
+        query = current_user.followed_posts
+    else:
+        query = Post.query
+
     page = request.args.get('page', 1, type=int)
-    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
+    pagination = query.order_by(Post.timestamp.desc()).paginate(
         page,
         per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
         error_out=False,
@@ -39,8 +48,33 @@ def index():
         'index.html',
         form=form,
         posts=posts,
+        show_followed=show_followed,
         pagination=pagination,
     )
+
+
+@main.route('/all')
+@login_required
+def show_all():
+    response = make_response(redirect(url_for('.index')))
+    response.set_cookie(
+        'show_followed',
+        '',
+        max_age=30 * 24 * 60 * 60,  # 30 days
+    )
+    return response
+
+
+@main.route('/followed')
+@login_required
+def show_followed():
+    response = make_response(redirect(url_for('.index')))
+    response.set_cookie(
+        'show_followed',
+        '1',
+        max_age=30 * 24 * 60 * 60,  # 30 days
+    )
+    return response
 
 
 @main.route('/post/<int:id>')

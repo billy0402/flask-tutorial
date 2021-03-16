@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 
 from app import create_app, db
-from app.models import User, Permission, Role, AnonymousUser
+from app.models import User, Permission, Role, AnonymousUser, Follow
 
 
 class UserModelTestCase(unittest.TestCase):
@@ -174,3 +174,42 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue('s=256' in gravatar_256)
         self.assertTrue('r=pg' in gravatar_pg)
         self.assertTrue('d=retro' in gravatar_retro)
+
+    def test_follows(self):
+        user = User(email='john@example.com', password='cat')
+        user2 = User(email='susan@example.org', password='dog')
+        db.session.add(user)
+        db.session.add(user2)
+        db.session.commit()
+        self.assertFalse(user.is_following(user2))
+        self.assertFalse(user.is_followed_by(user2))
+        timestamp_before = datetime.utcnow()
+        user.follow(user2)
+        db.session.add(user)
+        db.session.commit()
+        timestamp_after = datetime.utcnow()
+        self.assertTrue(user.is_following(user2))
+        self.assertFalse(user.is_followed_by(user2))
+        self.assertTrue(user2.is_followed_by(user))
+        self.assertEqual(user.followed.count(), 2)
+        self.assertEqual(user2.followers.count(), 2)
+        follow = user.followed.all()[-1]
+        self.assertTrue(follow.followed == user2)
+        self.assertTrue(
+            timestamp_before <= follow.timestamp <= timestamp_after,
+        )
+        follow = user2.followers.all()[-1]
+        self.assertTrue(follow.follower == user)
+        user.unfollow(user2)
+        db.session.add(user)
+        db.session.commit()
+        self.assertEqual(user.followed.count(), 1)
+        self.assertEqual(user2.followers.count(), 1)
+        self.assertEqual(Follow.query.count(), 2)
+        user2.follow(user)
+        db.session.add(user)
+        db.session.add(user2)
+        db.session.commit()
+        db.session.delete(user2)
+        db.session.commit()
+        self.assertEqual(Follow.query.count(), 1)
