@@ -23,6 +23,8 @@ flask-httpauth = "*"
 flake8 = "*"
 flake8-commas = "*"
 faker = "*"
+coverage = "*"
+selenium = "*"
 
 [requires]
 python_version = "3.8"
