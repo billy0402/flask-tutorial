@@ -17,6 +17,7 @@ email-validator = "*"
 flask-pagedown = "*"
 markdown = "*"
 bleach = "*"
+flask-httpauth = "*"
 
 [dev-packages]
 flake8 = "*"
