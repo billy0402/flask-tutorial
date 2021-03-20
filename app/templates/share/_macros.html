@@ -3,6 +3,7 @@
         <li {% if not pagination.has_prev %}class="disabled"{% endif %}>
             <a href="{% if pagination.has_prev %}
                         {{ url_for(endpoint, page=pagination.page - 1, **kwargs) }}
+                        {{ fragment }}
                      {% else %}
                         #
                      {% endif %}">
@@ -12,7 +13,7 @@
         {% for page in pagination.iter_pages() %}
             {% if page %}
                 <li {% if page == pagination.page %}class="active"{% endif %}>
-                    <a href="{{ url_for(endpoint, page=page, **kwargs) }}">
+                    <a href="{{ url_for(endpoint, page=page, **kwargs) }}{{ fragment }}">
                         {{ page }}
                     </a>
                 </li>
@@ -25,6 +26,7 @@
         <li {% if not pagination.has_next %}class="disabled"{% endif %}>
             <a href="{% if pagination.has_next %}
                         {{ url_for(endpoint, page=pagination.page + 1, **kwargs) }}
+                        {{ fragment }}
                      {% else %}
                         #
                      {% endif %}">
