@@ -61,3 +61,38 @@ from app import fake
 fake.users()
 fake.posts()
 ```
+
+## heroku
+
+```shell
+# local test
+$ heroku local:run flask deploy
+$ heroku local
+$ heroku local web=3
+
+# production deploy
+$ heroku maintenance:on
+$ git push heroku master
+$ heroku run flask deploy
+$ heroku restart
+$ heroku maintenance:off
+```
+
+## docker
+
+```shell
+$ docker build -t flasky:latest .
+$ docker run --name postgres -d \
+    -e POSTGRES_PASSWORD=postgres \
+    -e POSTGRES_DB="flasky" \
+    postgres:latest
+$ docker run --name flasky -d -p 8000:5000 \
+    --link postgres:dbserver \
+    -e MAIL_USERNAME=${your_email_address} \
+    -e MAIL_PASSWORD=${your_email_password} \
+    -e FLASKY_ADMIN=${your_email_address} \
+    -e DATABASE_URL="postgresql://postgres:postgres@dbserver/flasky" \
+    flasky:latest
+
+$ docker-compose up -d --build
+```

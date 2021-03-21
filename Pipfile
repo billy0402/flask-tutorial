@@ -18,6 +18,11 @@ flask-pagedown = "*"
 markdown = "*"
 bleach = "*"
 flask-httpauth = "*"
+psycopg2-binary = "*"
+flask-sslify = "*"
+gunicorn = "*"
+waitress = "*"
+python-dotenv = "*"
 
 [dev-packages]
 flake8 = "*"

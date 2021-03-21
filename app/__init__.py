@@ -30,6 +30,10 @@ def create_app(config_name):
     page_down.init_app(app)
     login_manager.init_app(app)
 
+    if app.config['SSL_REDIRECT']:
+        from flask_sslify import SSLify
+        sslify = SSLify(app)  # noqa F841
+
     # 在這裡指派路由與自訂錯誤頁面
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

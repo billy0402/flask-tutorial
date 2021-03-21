@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  flasky:
+    build: .
+    ports:
+      - "8000:5000"
+    env_file: .env
+    restart: always
+    links:
+      - postgres:dbserver
+
+  postgres:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "flasky"
+    restart: always

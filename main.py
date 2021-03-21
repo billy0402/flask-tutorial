@@ -2,10 +2,15 @@ import os
 import sys
 
 import click
-from flask_migrate import Migrate
+from dotenv import load_dotenv
+from flask_migrate import Migrate, upgrade
 
 from app import create_app, db
 from app.models import User, Role, Permission, Follow, Post, Comment
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
 
 COV = None
 if os.environ.get('FLASKY_COVERAGE'):
@@ -84,3 +89,18 @@ def profile(length, profile_dir):
     )
     os.environ['FLASK_RUN_FROM_CLI'] = 'false'
     app.run(debug=False)
+
+
+@app.cli.command()
+def deploy():
+    """
+    Run deployment tasks
+    """
+    # 將資料庫遷移至最新版本
+    upgrade()
+
+    # 建立或更新使用者角色
+    Role.insert_roles()
+
+    # 確認所有使用者都追隨他們自己
+    User.add_self_follows()
